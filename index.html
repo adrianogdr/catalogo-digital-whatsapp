@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sítio Progresso - Catálogo 1.5</title>
+  <style>
+    /* CONFIGURAÇÕES GERAIS COMPACTAS */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 8px;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+    }
+
+    /* HEADER */
+    .company-header {
+      background: #e8f5e9;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      border-left: 4px solid #1b5e20;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .company-header h1 {
+      margin: 0;
+      color: #1b5e20;
+      font-size: 1.3em;
+    }
+
+    .company-header p {
+      margin: 2px 0;
+      font-size: 0.9em;
+      color: #444;
+    }
+
+    .company-header a {
+      color: #1b5e20;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .badge {
+      background: #2e7d32;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.75em;
+      font-weight: bold;
+    }
+
+    .card {
+      background: white;
+      padding: 10px;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* LISTA DE PRODUTOS */
+    .category-title {
+      color: #1b5e20;
+      border-bottom: 1px solid #1b5e20;
+      margin-top: 15px;
+      padding-bottom: 2px;
+      text-transform: uppercase;
+      font-size: 1em;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    /* Item Zebrado para facilitar leitura */
+    .product-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 5px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .product-item:nth-child(even) {
+      background-color: #f9fbf9;
+    }
+
+    /* Listras suaves */
+
+    .btn-add {
+      background: #1b5e20;
+      color: white;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 0;
+      padding-bottom: 2px;
+    }
+
+    .btn-add:active {
+      transform: scale(0.9);
+    }
+
+    /* CARRINHO (ESTILO MOBILE APP) */
+    .cart-section {
+      position: sticky;
+      top: 10px;
+      height: fit-content;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-items-container {
+      overflow-y: auto;
+      flex-grow: 1;
+      margin-bottom: 10px;
+      max-height: 60vh;
+      padding: 0px 10px 0 0;
+    }
+
+    .cart-item {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.9em;
+      margin-bottom: 8px;
+      border-bottom: 1px dashed #ddd;
+      padding-bottom: 8px;
+    }
+
+    .cart-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f5f5f5;
+      padding: 4px;
+      border-radius: 4px;
+      margin-top: 4px;
+    }
+
+    .btn-mini {
+      width: 26px;
+      height: 26px;
+      border: 1px solid #ccc;
+      background: white;
+      border-radius: 4px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* --- NOVA ÁREA DE RODAPÉ (BOTÕES ESQ | TOTAL DIR) --- */
+    .cart-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 2px solid #eee;
+      padding-top: 10px;
+      margin-top: auto;
+    }
+
+    .footer-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Botões Quadrados com Ícones */
+    .btn-icon {
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-icon:active {
+      transform: scale(0.95);
+    }
+
+    .btn-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: white;
+    }
+
+    .btn-zap {
+      background-color: #25D366;
+    }
+
+    .btn-copy {
+      background-color: #1976D2;
+    }
+
+    .btn-clear {
+      background-color: #D32F2F;
+    }
+
+    .footer-total {
+      text-align: right;
+      line-height: 1.1;
+    }
+
+    .footer-total small {
+      color: #666;
+      font-size: 0.8em;
+      text-transform: uppercase;
+    }
+
+    .footer-total div {
+      color: #1b5e20;
+      font-weight: bold;
+      font-size: 1.4em;
+    }
+
+    /* Mobile Fixes */
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      body {
+        padding: 0;
+        padding-bottom: 140px;
+      }
+
+      /* Espaço para o carrinho fixo */
+      .company-header,
+      .product-list {
+        margin: 10px;
+      }
+
+      /* Carrinho Fixo no Fundo */
+      .cart-section {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        z-index: 1000;
+        border-radius: 15px 15px 0 0;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+        margin: 0;
+        padding: 15px;
+        background: white;
+        max-height: 60vh;
+      }
+
+      .cart-section:empty {
+        display: none;
+      }
+
+      /* Esconde se vazio (via JS toggle) */
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="product-list card" id="productList">
+
+      <div class="company-header">
+        <h1>José Aparecido Sasso</h1>
+        <p><strong>Produtor Rural</strong> | Inscrição: 001.319.910.0058</p>
+        <p>📍 Sítio Progresso – Dona Euzébia – MG</p>
+        <p>✉️ <a href="mailto:fruticulturaprogresso@gmail.com">fruticulturaprogresso@gmail.com</a></p>
+        <span class="badge">Mudas Certificadas (IMA/EMATER)</span>
+      </div>
+
+      <div style="margin: 10px 0; font-size: 0.9em; color: #333; line-height: 1.4;">
+        <strong>OBS:</strong> Temos <span style="color: #1976D2; font-weight: bold;">Palmeira Imperial</span> - Porte
+        maior com tronco cinza R$250,00 o metro, e também nativas
+        menores a preços diferenciados. <strong>FRETE A COMBINAR.</strong>
+      </div>
+      <p style="color:#666; font-size:0.9em; margin:10px 0;">🛒 Toque no <b>+</b> para adicionar itens:</p>
+      <div id="renderArea"></div>
+    </div>
+
+    <div class="cart-section card" id="cartSection" style="display: none;">
+
+      <span onclick="toggleCart()"
+        style="color:black; cursor:pointer; font-size: 1.3em; display:block; width:100%; text-align:center; margin-bottom:5px;font-weight: bold;background-color:lightgray;padding-top: 10px;padding-bottom: 10px;">▼
+        Ocultar</span>
+
+      <div class="cart-header"
+        style="font-weight:bold; color:#1b5e20; margin-bottom:10px; font-size:1.1em; display:flex; justify-content:center;">
+        <span>🛒 Seu Pedido</span>
+      </div>
+
+      <div id="cartItems" class="cart-items-container">
+      </div>
+
+      <div class="cart-footer">
+        <div class="footer-buttons">
+          <button class="btn-icon btn-zap" onclick="enviarZap()" title="Enviar no WhatsApp">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M12.0316 0C5.39843 0 0 5.39843 0 12.0316C0 14.1611 0.55627 16.1559 1.5173 17.8961L0.0965851 23.0766L5.42159 21.6865C7.09459 22.9099 9.15582 23.6308 11.3961 23.6308H11.4013C18.0293 23.6308 23.4277 18.2324 23.4277 11.5992C23.4277 5.25056 18.3072 0.0862081 12.0316 0ZM11.9698 19.8398C10.0857 19.8398 8.31846 19.3331 6.80489 18.4414L6.44391 18.2269L2.83905 19.1654L3.80164 15.6542L3.56586 15.2796C2.58334 13.7145 2.06456 11.8906 2.06456 9.99849C2.06456 4.5323 6.50859 0.0862081 11.9698 0.0862081C17.431 0.0862081 21.875 4.5323 21.875 9.99849C21.875 15.4647 17.431 19.8398 11.9698 19.8398Z" />
+            </svg>
+          </button>
+          <button class="btn-icon btn-copy" onclick="copiarPedido()" title="Copiar Pedido">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" />
+            </svg>
+          </button>
+          <button class="btn-icon btn-clear" onclick="limparCarrinho()" title="Limpar Carrinho">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="footer-total">
+          <small>Total a Pagar</small>
+          <div id="totalValue">R$ 0,00</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="floatingBtn" onclick="toggleCart()"
+      style="position:fixed; bottom:20px; right:20px; background:#1b5e20; color:white; padding:15px; border-radius:50%; box-shadow:0 4px 10px rgba(0,0,0,0.3); display:none; cursor:pointer; z-index:999;">
+      🛒
+    </div>
+  </div>
+
+  <script>
+    // DADOS
+    const catalogo = [
+      {
+        categoria: "🍊 CITRUS",
+        itens: [
+          { nome: "Carioca", preco: 28.00 }, { nome: "Cidra", preco: 28.00 }, { nome: "Cravo", preco: 28.00 },
+          { nome: "Flórida ou Danci", preco: 28.00 }, { nome: "Laranja Bahia", preco: 27.00 }, { nome: "Laranja Campista", preco: 27.00 },
+          { nome: "Laranja Imperial", preco: 27.00 }, { nome: "Laranja Kinkan", preco: 27.00 }, { nome: "Laranja Lima", preco: 27.00 },
+          { nome: "Laranja Lima Verde", preco: 27.00 }, { nome: "Laranja Pêra Natal", preco: 27.00 }, { nome: "Laranja Pêra Rio", preco: 27.00 },
+          { nome: "Laranja Sanguínea", preco: 27.00 }, { nome: "Laranja Seleta", preco: 27.00 }, { nome: "Laranja Serra D'água", preco: 27.00 },
+          { nome: "Laranja Valencia", preco: 27.00 }, { nome: "Lima de Bico / Umbigo", preco: 28.00 }, { nome: "Limão Ceciliano", preco: 28.50 },
+          { nome: "Limão Cravo / Rosa", preco: 27.00 }, { nome: "Limão Doce", preco: 28.00 }, { nome: "Limão Galego", preco: 27.00 },
+          { nome: "Limão Taiti", preco: 27.00 }, { nome: "Monte Negrini", preco: 27.00 }, { nome: "Murcote", preco: 28.50 },
+          { nome: "Ponkan", preco: 27.00 }, { nome: "Ponkan sem sementes", preco: 28.00 }, { nome: "Tangerina Cravão", preco: 29.00 },
+          { nome: "Tangerina IAC 118", preco: 29.00 }, { nome: "Tangerina Lendária", preco: 29.00 }, { nome: "Tângelo", preco: 28.00 }
+        ]
+      },
+      {
+        categoria: "🍎 FRUTÍFERAS",
+        itens: [
+          { nome: "Abacate Avocado Hass", preco: 25.00 }, { nome: "Abacate Breda", preco: 20.00 }, { nome: "Abacate Fortuna", preco: 20.00 },
+          { nome: "Abacate Margarida", preco: 20.00 }, { nome: "Abacate Ouro Verde", preco: 20.00 }, { nome: "Abacate Primavera", preco: 20.00 },
+          { nome: "Abacate Quintal", preco: 20.00 }, { nome: "Abacate Terra", preco: 25.00 }, { nome: "Acerola", preco: 20.00 },
+          { nome: "Acerola Estaquia", preco: 25.00 }, { nome: "Amora Chilena", preco: 25.00 }, { nome: "Amora Comum", preco: 20.00 },
+          { nome: "Banana Anã", preco: 20.00 }, { nome: "Banana Comum", preco: 20.00 }, { nome: "Banana Maçã", preco: 20.00 },
+          { nome: "Banana Nanica", preco: 20.00 }, { nome: "Banana Nanicão", preco: 20.00 }, { nome: "Banana Ouro", preco: 20.00 },
+          { nome: "Banana Prata", preco: 20.00 }, { nome: "Banana Pão", preco: 20.00 }, { nome: "Caju", preco: 25.00 },
+          { nome: "Caju Produzindo", preco: 50.00 }, { nome: "Cana (Todas variedades)", preco: 20.00 }, { nome: "Caqui enxerto", preco: 40.00 },
+          { nome: "Carambola", preco: 22.00 }, { nome: "Carambola Enxerto", preco: 40.00 }, { nome: "Carambola Sacolão", preco: 55.00 },
+          { nome: "Coco Maior", preco: 400.00 }, { nome: "Coco Produzindo", preco: 600.00 }, { nome: "Coco Sacola", preco: 40.00 },
+          { nome: "Coco Torrão Médio", preco: 100.00 }, { nome: "Figo Roxo/Valinhos", preco: 20.00 }, { nome: "Fruta do Conde", preco: 20.00 },
+          { nome: "Fruta do Conde Produzindo", preco: 70.00 }, { nome: "Goiaba (Paloma/Pedro Sato)", preco: 20.00 }, { nome: "Graviola", preco: 20.00 },
+          { nome: "Graviola Enxertada", preco: 45.00 }, { nome: "Jabuticaba Híbrida", preco: 150.00 }, { nome: "Jabuticaba Híbrida Menor", preco: 90.00 },
+          { nome: "Jabuticaba Sabará 4 Anos", preco: 70.00 }, { nome: "Jabuticaba Sabará 6 Anos", preco: 80.00 }, { nome: "Jabuticaba Sabará 8 Anos", preco: 100.00 },
+          { nome: "Lichia Alporque", preco: 35.00 }, { nome: "Lichia Pé Franco", preco: 25.00 }, { nome: "Mamão Papaia/Comum", preco: 12.00 },
+          { nome: "Mandioca (Branca/Amarela)", preco: 15.00 }, { nome: "Manga Adem", preco: 25.00 }, { nome: "Manga Espada", preco: 25.00 },
+          { nome: "Manga Palmer", preco: 25.00 }, { nome: "Manga Queite", preco: 25.00 }, { nome: "Manga Tomy", preco: 25.00 },
+          { nome: "Manga Ubá", preco: 25.00 }, { nome: "Manga c/ 2m de altura", preco: 60.00 }, { nome: "Maracujá Azedo", preco: 12.00 },
+          { nome: "Maracujá Doce", preco: 15.00 }, { nome: "Pitanga", preco: 20.00 }, { nome: "Pêssego", preco: 45.00 }, { nome: "Romã", preco: 20.00 },
+          { nome: "Uva Niágara/Francesa", preco: 38.00 }
+        ]
+      },
+      {
+        categoria: "🌻 ORNAMENTAIS",
+        itens: [
+          { nome: "Azaléia", preco: 20.00 }, { nome: "Bico de Papagaio", preco: 22.00 }, { nome: "Buchinho", preco: 40.00 },
+          { nome: "Buchinho (G)", preco: 50.00 }, { nome: "Buganvília", preco: 20.00 }, { nome: "Eugênia Média", preco: 60.00 },
+          { nome: "Eugênia Pequena", preco: 50.00 }, { nome: "Manacá da Serra", preco: 40.00 }, { nome: "Manacá da Serra (G)", preco: 50.00 },
+          { nome: "Palmeira Imperial", preco: 25.00 }, { nome: "Palmeira Imperial (G)", preco: 35.00 }, { nome: "Palmeira Imperial Sacolão", preco: 70.00 },
+          { nome: "Palmeira Real", preco: 25.00 }, { nome: "Palmeira Ráfia", preco: 30.00 }, { nome: "Palmeira Triangular", preco: 50.00 },
+          { nome: "Pingo de Ouro", preco: 7.00 }, { nome: "Resedá", preco: 25.00 }, { nome: "Rosas Variadas", preco: 20.00 }
+        ]
+      },
+      {
+        categoria: "🌳 NATIVAS",
+        itens: [
+          { nome: "Acácia (Várias)", preco: 20.00 }, { nome: "Cedro Australiano", preco: 20.00 }, { nome: "Ipê Amarelo (2m)", preco: 60.00 },
+          { nome: "Ipê Amarelo/Branco", preco: 20.00 }, { nome: "Ipê Rosa (2m)", preco: 60.00 }, { nome: "Ipê Rosa/Roxo", preco: 23.00 },
+          { nome: "Jatobá", preco: 20.00 }, { nome: "Mogno", preco: 25.00 }, { nome: "Pau Brasil", preco: 25.00 }, { nome: "Pau Brasil (G)", preco: 60.00 },
+          { nome: "Pau Ferro", preco: 20.00 }, { nome: "Pinheiro Paraná (G)", preco: 160.00 }, { nome: "Pinheiro do Paraná", preco: 90.00 }, { nome: "Quaresmeira", preco: 25.00 }
+        ]
+      }
+    ];
+
+    let carrinho = {};
+
+    function renderCatalogo() {
+      const area = document.getElementById('renderArea');
+      area.innerHTML = '';
+      catalogo.forEach(cat => {
+        const catTitle = document.createElement('div');
+        catTitle.className = 'category-title';
+        catTitle.innerText = cat.categoria;
+        area.appendChild(catTitle);
+        cat.itens.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'product-item';
+          div.innerHTML = `
+                    <span style="font-weight:500">${item.nome}</span>
+                    <div style="display:flex; align-items:center;">
+                        <span style="margin-right:8px; color:#1b5e20; font-size:0.95em; font-weight:bold;">R$ ${item.preco.toFixed(2)}</span>
+                        <button class="btn-add" onclick="alterarQtd('${item.nome}', ${item.preco}, 1)">+</button>
+                    </div>`;
+          area.appendChild(div);
+        });
+      });
+    }
+
+    function alterarQtd(nome, preco, delta) {
+      if (!carrinho[nome]) carrinho[nome] = { preco: preco, qtd: 0 };
+      carrinho[nome].qtd += delta;
+      if (carrinho[nome].qtd <= 0) delete carrinho[nome];
+      atualizarCarrinho();
+    }
+
+    function atualizarCarrinho() {
+      const cartSection = document.getElementById('cartSection');
+      const list = document.getElementById('cartItems');
+      const totalEl = document.getElementById('totalValue');
+      const floatBtn = document.getElementById('floatingBtn');
+      const nomes = Object.keys(carrinho);
+
+      // Se não tem itens, esconde tudo e sai
+      if (nomes.length === 0) {
+        cartSection.style.display = 'none';
+        floatBtn.style.display = 'none';
+        return;
+      }
+
+      // 1. Calcula os totais e gera o HTML da lista
+      let total = 0;
+      list.innerHTML = '';
+      nomes.sort().forEach(nome => {
+        const item = carrinho[nome];
+        total += item.qtd * item.preco;
+        list.innerHTML += `
+                <div class="cart-item">
+                    <div style="display:flex; justify-content:space-between; font-weight:500">
+                        <span>${nome}</span>
+                        <small>R$ ${item.preco.toFixed(2)}</small>
+                    </div>
+                    <div class="cart-controls">
+                        <button class="btn-mini" onclick="alterarQtd('${nome}', ${item.preco}, -1)">-</button>
+                        <span>${item.qtd}</span>
+                        <button class="btn-mini" onclick="alterarQtd('${nome}', ${item.preco}, 1)">+</button>
+                        <span style="font-weight:bold; color:#1b5e20">R$ ${(item.qtd * item.preco).toFixed(2)}</span>
+                    </div>
+                </div>`;
+      });
+
+      const totalTexto = 'R$ ' + total.toFixed(2);
+      totalEl.innerText = totalTexto;
+
+      // Atualiza o texto do botão flutuante também
+      floatBtn.innerText = '🛒 ' + totalTexto;
+
+      // 2. LÓGICA DE EXIBIÇÃO CORRIGIDA:
+      // Verificamos se o carrinho JÁ está aberto.
+      if (cartSection.style.display === 'flex') {
+        // Se já está aberto, mantém aberto e esconde o botão flutuante
+        floatBtn.style.display = 'none';
+      } else {
+        // Se está fechado, MANTÉM FECHADO e mostra só o botão flutuante
+        cartSection.style.display = 'none';
+        floatBtn.style.display = 'block';
+      }
+    }
+
+    // Função para minimizar/expandir carrinho
+    function toggleCart() {
+      const section = document.getElementById('cartSection');
+      const float = document.getElementById('floatingBtn');
+      if (Object.keys(carrinho).length === 0) return;
+
+      if (section.style.display === 'none') {
+        section.style.display = 'flex';
+        float.style.display = 'none';
+      } else {
+        section.style.display = 'none';
+        float.style.display = 'block';
+        float.innerText = '🛒 R$ ' + document.getElementById('totalValue').innerText.replace('R$ ', '');
+      }
+    }
+
+    function gerarTexto() {
+      const nomes = Object.keys(carrinho);
+      if (nomes.length === 0) return null;
+      let txt = "*PEDIDO SÍTIO PROGRESSO*\n------------------------\n";
+      let tot = 0;
+      nomes.sort().forEach(n => {
+        const i = carrinho[n];
+        tot += i.qtd * i.preco;
+        txt += `✅ ${i.qtd}x ${n}\n   (R$ ${(i.qtd * i.preco).toFixed(2)})\n`;
+      });
+      txt += `------------------------\n*TOTAL: R$ ${tot.toFixed(2)}*`;
+      return txt;
+    }
+
+    function enviarZap() {
+      const t = gerarTexto();
+      if (t) window.open(`https://wa.me/?text=${encodeURIComponent(t)}`, '_blank');
+    }
+
+    function copiarPedido() {
+      const t = gerarTexto();
+      if (t) navigator.clipboard.writeText(t).then(() => alert("Copiado!"));
+    }
+
+    function limparCarrinho() {
+      if (confirm("Limpar carrinho?")) { carrinho = {}; atualizarCarrinho(); }
+    }
+
+    renderCatalogo();
+  </script>
+
+</body>
+
+</html>
