@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sítio Progresso - Catálogo 1.5</title>
+  <title>Sítio Progresso - Catálogo 1.9</title>
   <style>
     /* CONFIGURAÇÕES GERAIS COMPACTAS */
     body {
@@ -80,7 +80,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* Item Zebrado para facilitar leitura */
+    /* Item Zebrado */
     .product-item {
       display: flex;
       justify-content: space-between;
@@ -92,8 +92,6 @@
     .product-item:nth-child(even) {
       background-color: #f9fbf9;
     }
-
-    /* Listras suaves */
 
     .btn-add {
       background: #1b5e20;
@@ -115,7 +113,7 @@
       transform: scale(0.9);
     }
 
-    /* CARRINHO (ESTILO MOBILE APP) */
+    /* CARRINHO */
     .cart-section {
       position: sticky;
       top: 10px;
@@ -130,7 +128,7 @@
       flex-grow: 1;
       margin-bottom: 10px;
       max-height: 60vh;
-      padding: 0px 10px 0 0;
+      padding-right: 5px;
     }
 
     .cart-item {
@@ -162,7 +160,7 @@
       color: #333;
     }
 
-    /* --- NOVA ÁREA DE RODAPÉ (BOTÕES ESQ | TOTAL DIR) --- */
+    /* RODAPÉ DO CARRINHO */
     .cart-footer {
       display: flex;
       align-items: center;
@@ -177,7 +175,6 @@
       gap: 8px;
     }
 
-    /* Botões Quadrados com Ícones */
     .btn-icon {
       width: 42px;
       height: 42px;
@@ -230,7 +227,7 @@
       font-size: 1.4em;
     }
 
-    /* Mobile Fixes */
+    /* MOBILE */
     @media (max-width: 768px) {
       .container {
         grid-template-columns: 1fr;
@@ -242,13 +239,11 @@
         padding-bottom: 140px;
       }
 
-      /* Espaço para o carrinho fixo */
       .company-header,
       .product-list {
         margin: 10px;
       }
 
-      /* Carrinho Fixo no Fundo */
       .cart-section {
         position: fixed;
         bottom: 0;
@@ -267,8 +262,6 @@
       .cart-section:empty {
         display: none;
       }
-
-      /* Esconde se vazio (via JS toggle) */
     }
   </style>
 </head>
@@ -288,9 +281,10 @@
 
       <div style="margin: 10px 0; font-size: 0.9em; color: #333; line-height: 1.4;">
         <strong>OBS:</strong> Temos <span style="color: #1976D2; font-weight: bold;">Palmeira Imperial</span> - Porte
-        maior com tronco cinza R$250,00 o metro, e também nativas
-        menores a preços diferenciados. <strong>FRETE A COMBINAR.</strong>
+        maior com tronco cinza R$250,00 o metro, e também nativas menores a preços diferenciados. <strong>FRETE A
+          COMBINAR.</strong>
       </div>
+
       <p style="color:#666; font-size:0.9em; margin:10px 0;">🛒 Toque no <b>+</b> para adicionar itens:</p>
       <div id="renderArea"></div>
     </div>
@@ -298,16 +292,16 @@
     <div class="cart-section card" id="cartSection" style="display: none;">
 
       <span onclick="toggleCart()"
-        style="color:black; cursor:pointer; font-size: 1.3em; display:block; width:100%; text-align:center; margin-bottom:5px;font-weight: bold;background-color:lightgray;padding-top: 10px;padding-bottom: 10px;">▼
-        Ocultar</span>
+        style="color:black; cursor:pointer; font-size: 1.3em; display:block; width:100%; text-align:center; margin-bottom:5px; font-weight: bold; background-color:lightgray; padding-top: 10px; padding-bottom: 10px;">
+        ▼ Ocultar
+      </span>
 
       <div class="cart-header"
         style="font-weight:bold; color:#1b5e20; margin-bottom:10px; font-size:1.1em; display:flex; justify-content:center;">
         <span>🛒 Seu Pedido</span>
       </div>
 
-      <div id="cartItems" class="cart-items-container">
-      </div>
+      <div id="cartItems" class="cart-items-container"></div>
 
       <div class="cart-footer">
         <div class="footer-buttons">
@@ -330,7 +324,6 @@
             </svg>
           </button>
         </div>
-
         <div class="footer-total">
           <small>Total a Pagar</small>
           <div id="totalValue">R$ 0,00</div>
@@ -339,72 +332,67 @@
     </div>
 
     <div id="floatingBtn" onclick="toggleCart()"
-      style="position:fixed; bottom:20px; right:20px; background:#1b5e20; color:white; padding:15px; border-radius:50%; box-shadow:0 4px 10px rgba(0,0,0,0.3); display:none; cursor:pointer; z-index:999;">
-      🛒
+      style="position:fixed; bottom:20px; right:20px; background:#1b5e20; color:white; padding:15px; border-radius:50px; box-shadow:0 4px 10px rgba(0,0,0,0.3); display:none; cursor:pointer; z-index:999; font-weight:bold;">
+      🛒 Ver Carrinho
     </div>
   </div>
 
   <script>
-    // DADOS
     const catalogo = [
       {
-        categoria: "🍊 CITRUS",
-        itens: [
-          { nome: "Carioca", preco: 28.00 }, { nome: "Cidra", preco: 28.00 }, { nome: "Cravo", preco: 28.00 },
-          { nome: "Flórida ou Danci", preco: 28.00 }, { nome: "Laranja Bahia", preco: 27.00 }, { nome: "Laranja Campista", preco: 27.00 },
-          { nome: "Laranja Imperial", preco: 27.00 }, { nome: "Laranja Kinkan", preco: 27.00 }, { nome: "Laranja Lima", preco: 27.00 },
-          { nome: "Laranja Lima Verde", preco: 27.00 }, { nome: "Laranja Pêra Natal", preco: 27.00 }, { nome: "Laranja Pêra Rio", preco: 27.00 },
-          { nome: "Laranja Sanguínea", preco: 27.00 }, { nome: "Laranja Seleta", preco: 27.00 }, { nome: "Laranja Serra D'água", preco: 27.00 },
-          { nome: "Laranja Valencia", preco: 27.00 }, { nome: "Lima de Bico / Umbigo", preco: 28.00 }, { nome: "Limão Ceciliano", preco: 28.50 },
-          { nome: "Limão Cravo / Rosa", preco: 27.00 }, { nome: "Limão Doce", preco: 28.00 }, { nome: "Limão Galego", preco: 27.00 },
-          { nome: "Limão Taiti", preco: 27.00 }, { nome: "Monte Negrini", preco: 27.00 }, { nome: "Murcote", preco: 28.50 },
-          { nome: "Ponkan", preco: 27.00 }, { nome: "Ponkan sem sementes", preco: 28.00 }, { nome: "Tangerina Cravão", preco: 29.00 },
-          { nome: "Tangerina IAC 118", preco: 29.00 }, { nome: "Tangerina Lendária", preco: 29.00 }, { nome: "Tângelo", preco: 28.00 }
+        categoria: "🍊 CITRUS", itens: [
+          { n: "Carioca", p: 28.00 }, { n: "Cidra", p: 28.00 }, { n: "Cravo", p: 28.00 },
+          { n: "Flórida ou Danci", p: 28.00 }, { n: "Laranja Bahia", p: 27.00 }, { n: "Laranja Campista", p: 27.00 },
+          { n: "Laranja Imperial", p: 27.00 }, { n: "Laranja Kinkan", p: 27.00 }, { n: "Laranja Lima", p: 27.00 },
+          { n: "Laranja Lima Verde", p: 27.00 }, { n: "Laranja Pêra Natal", p: 27.00 }, { n: "Laranja Pêra Rio", p: 27.00 },
+          { n: "Laranja Sanguínea", p: 27.00 }, { n: "Laranja Seleta", p: 27.00 }, { n: "Laranja Serra D'água", p: 27.00 },
+          { n: "Laranja Valencia", p: 27.00 }, { n: "Lima de Bico / Umbigo", p: 28.00 }, { n: "Limão Ceciliano", p: 28.50 },
+          { n: "Limão Cravo / Rosa", p: 27.00 }, { n: "Limão Doce", p: 28.00 }, { n: "Limão Galego", p: 27.00 },
+          { n: "Limão Taiti", p: 27.00 }, { n: "Monte Negrini", p: 27.00 }, { n: "Murcote", p: 28.50 },
+          { n: "Ponkan", p: 27.00 }, { n: "Ponkan sem sementes", p: 28.00 }, { n: "Tangerina Cravão", p: 29.00 },
+          { n: "Tangerina IAC 118", p: 29.00 }, { n: "Tangerina Lendária", p: 29.00 }, { n: "Tângelo", p: 28.00 }
         ]
       },
       {
-        categoria: "🍎 FRUTÍFERAS",
-        itens: [
-          { nome: "Abacate Avocado Hass", preco: 25.00 }, { nome: "Abacate Breda", preco: 20.00 }, { nome: "Abacate Fortuna", preco: 20.00 },
-          { nome: "Abacate Margarida", preco: 20.00 }, { nome: "Abacate Ouro Verde", preco: 20.00 }, { nome: "Abacate Primavera", preco: 20.00 },
-          { nome: "Abacate Quintal", preco: 20.00 }, { nome: "Abacate Terra", preco: 25.00 }, { nome: "Acerola", preco: 20.00 },
-          { nome: "Acerola Estaquia", preco: 25.00 }, { nome: "Amora Chilena", preco: 25.00 }, { nome: "Amora Comum", preco: 20.00 },
-          { nome: "Banana Anã", preco: 20.00 }, { nome: "Banana Comum", preco: 20.00 }, { nome: "Banana Maçã", preco: 20.00 },
-          { nome: "Banana Nanica", preco: 20.00 }, { nome: "Banana Nanicão", preco: 20.00 }, { nome: "Banana Ouro", preco: 20.00 },
-          { nome: "Banana Prata", preco: 20.00 }, { nome: "Banana Pão", preco: 20.00 }, { nome: "Caju", preco: 25.00 },
-          { nome: "Caju Produzindo", preco: 50.00 }, { nome: "Cana (Todas variedades)", preco: 20.00 }, { nome: "Caqui enxerto", preco: 40.00 },
-          { nome: "Carambola", preco: 22.00 }, { nome: "Carambola Enxerto", preco: 40.00 }, { nome: "Carambola Sacolão", preco: 55.00 },
-          { nome: "Coco Maior", preco: 400.00 }, { nome: "Coco Produzindo", preco: 600.00 }, { nome: "Coco Sacola", preco: 40.00 },
-          { nome: "Coco Torrão Médio", preco: 100.00 }, { nome: "Figo Roxo/Valinhos", preco: 20.00 }, { nome: "Fruta do Conde", preco: 20.00 },
-          { nome: "Fruta do Conde Produzindo", preco: 70.00 }, { nome: "Goiaba (Paloma/Pedro Sato)", preco: 20.00 }, { nome: "Graviola", preco: 20.00 },
-          { nome: "Graviola Enxertada", preco: 45.00 }, { nome: "Jabuticaba Híbrida", preco: 150.00 }, { nome: "Jabuticaba Híbrida Menor", preco: 90.00 },
-          { nome: "Jabuticaba Sabará 4 Anos", preco: 70.00 }, { nome: "Jabuticaba Sabará 6 Anos", preco: 80.00 }, { nome: "Jabuticaba Sabará 8 Anos", preco: 100.00 },
-          { nome: "Lichia Alporque", preco: 35.00 }, { nome: "Lichia Pé Franco", preco: 25.00 }, { nome: "Mamão Papaia/Comum", preco: 12.00 },
-          { nome: "Mandioca (Branca/Amarela)", preco: 15.00 }, { nome: "Manga Adem", preco: 25.00 }, { nome: "Manga Espada", preco: 25.00 },
-          { nome: "Manga Palmer", preco: 25.00 }, { nome: "Manga Queite", preco: 25.00 }, { nome: "Manga Tomy", preco: 25.00 },
-          { nome: "Manga Ubá", preco: 25.00 }, { nome: "Manga c/ 2m de altura", preco: 60.00 }, { nome: "Maracujá Azedo", preco: 12.00 },
-          { nome: "Maracujá Doce", preco: 15.00 }, { nome: "Pitanga", preco: 20.00 }, { nome: "Pêssego", preco: 45.00 }, { nome: "Romã", preco: 20.00 },
-          { nome: "Uva Niágara/Francesa", preco: 38.00 }
+        categoria: "🍎 FRUTÍFERAS", itens: [
+          { n: "Abacate Avocado Hass", p: 25.00 }, { n: "Abacate Breda", p: 20.00 }, { n: "Abacate Fortuna", p: 20.00 },
+          { n: "Abacate Margarida", p: 20.00 }, { n: "Abacate Ouro Verde", p: 20.00 }, { n: "Abacate Primavera", p: 20.00 },
+          { n: "Abacate Quintal", p: 20.00 }, { n: "Abacate Terra", p: 25.00 }, { n: "Acerola", p: 20.00 },
+          { n: "Acerola Estaquia", p: 25.00 }, { n: "Amora Chilena", p: 25.00 }, { n: "Amora Comum", p: 20.00 },
+          { n: "Banana Anã", p: 20.00 }, { n: "Banana Comum", p: 20.00 }, { n: "Banana Maçã", p: 20.00 },
+          { n: "Banana Nanica", p: 20.00 }, { n: "Banana Nanicão", p: 20.00 }, { n: "Banana Ouro", p: 20.00 },
+          { n: "Banana Prata", p: 20.00 }, { n: "Banana Pão", p: 20.00 }, { n: "Caju", p: 25.00 },
+          { n: "Caju Produzindo", p: 50.00 }, { n: "Cana (Todas variedades)", p: 20.00 }, { n: "Caqui enxerto", p: 40.00 },
+          { n: "Carambola", p: 22.00 }, { n: "Carambola Enxerto", p: 40.00 }, { n: "Carambola Sacolão", p: 55.00 },
+          { n: "Coco Maior", p: 400.00 }, { n: "Coco Produzindo", p: 600.00 }, { n: "Coco Sacola", p: 40.00 },
+          { n: "Coco Torrão Médio", p: 100.00 }, { n: "Figo Roxo/Valinhos", p: 20.00 }, { n: "Fruta do Conde", p: 20.00 },
+          { n: "Fruta do Conde Produzindo", p: 70.00 }, { n: "Goiaba (Paloma/Pedro Sato)", p: 20.00 }, { n: "Graviola", p: 20.00 },
+          { n: "Graviola Enxertada", p: 45.00 }, { n: "Jabuticaba Híbrida", p: 150.00 }, { n: "Jabuticaba Híbrida Menor", p: 90.00 },
+          { n: "Jabuticaba Sabará 4 Anos", p: 70.00 }, { n: "Jabuticaba Sabará 6 Anos", p: 80.00 }, { n: "Jabuticaba Sabará 8 Anos", p: 100.00 },
+          { n: "Lichia Alporque", p: 35.00 }, { n: "Lichia Pé Franco", p: 25.00 }, { n: "Mamão Papaia/Comum", p: 12.00 },
+          { n: "Mandioca (Branca/Amarela)", p: 15.00 }, { n: "Manga Adem", p: 25.00 }, { n: "Manga Espada", p: 25.00 },
+          { n: "Manga Palmer", p: 25.00 }, { n: "Manga Queite", p: 25.00 }, { n: "Manga Tomy", p: 25.00 },
+          { n: "Manga Ubá", p: 25.00 }, { n: "Manga c/ 2m de altura", p: 60.00 }, { n: "Maracujá Azedo", p: 12.00 },
+          { n: "Maracujá Doce", p: 15.00 }, { n: "Pitanga", p: 20.00 }, { n: "Pêssego", p: 45.00 }, { n: "Romã", p: 20.00 },
+          { n: "Uva Niágara/Francesa", p: 38.00 }
         ]
       },
       {
-        categoria: "🌻 ORNAMENTAIS",
-        itens: [
-          { nome: "Azaléia", preco: 20.00 }, { nome: "Bico de Papagaio", preco: 22.00 }, { nome: "Buchinho", preco: 40.00 },
-          { nome: "Buchinho (G)", preco: 50.00 }, { nome: "Buganvília", preco: 20.00 }, { nome: "Eugênia Média", preco: 60.00 },
-          { nome: "Eugênia Pequena", preco: 50.00 }, { nome: "Manacá da Serra", preco: 40.00 }, { nome: "Manacá da Serra (G)", preco: 50.00 },
-          { nome: "Palmeira Imperial", preco: 25.00 }, { nome: "Palmeira Imperial (G)", preco: 35.00 }, { nome: "Palmeira Imperial Sacolão", preco: 70.00 },
-          { nome: "Palmeira Real", preco: 25.00 }, { nome: "Palmeira Ráfia", preco: 30.00 }, { nome: "Palmeira Triangular", preco: 50.00 },
-          { nome: "Pingo de Ouro", preco: 7.00 }, { nome: "Resedá", preco: 25.00 }, { nome: "Rosas Variadas", preco: 20.00 }
+        categoria: "🌻 ORNAMENTAIS", itens: [
+          { n: "Azaléia", p: 20.00 }, { n: "Bico de Papagaio", p: 22.00 }, { n: "Buchinho", p: 40.00 },
+          { n: "Buchinho (G)", p: 50.00 }, { n: "Buganvília", p: 20.00 }, { n: "Eugênia Média", p: 60.00 },
+          { n: "Eugênia Pequena", p: 50.00 }, { n: "Manacá da Serra", p: 40.00 }, { n: "Manacá da Serra (G)", p: 50.00 },
+          { n: "Palmeira Imperial", p: 25.00 }, { n: "Palmeira Imperial (G)", p: 35.00 }, { n: "Palmeira Imperial Sacolão", p: 70.00 },
+          { n: "Palmeira Real", p: 25.00 }, { n: "Palmeira Ráfia", p: 30.00 }, { n: "Palmeira Triangular", p: 50.00 },
+          { n: "Pingo de Ouro", p: 7.00 }, { n: "Resedá", p: 25.00 }, { n: "Rosas Variadas", p: 20.00 }
         ]
       },
       {
-        categoria: "🌳 NATIVAS",
-        itens: [
-          { nome: "Acácia (Várias)", preco: 20.00 }, { nome: "Cedro Australiano", preco: 20.00 }, { nome: "Ipê Amarelo (2m)", preco: 60.00 },
-          { nome: "Ipê Amarelo/Branco", preco: 20.00 }, { nome: "Ipê Rosa (2m)", preco: 60.00 }, { nome: "Ipê Rosa/Roxo", preco: 23.00 },
-          { nome: "Jatobá", preco: 20.00 }, { nome: "Mogno", preco: 25.00 }, { nome: "Pau Brasil", preco: 25.00 }, { nome: "Pau Brasil (G)", preco: 60.00 },
-          { nome: "Pau Ferro", preco: 20.00 }, { nome: "Pinheiro Paraná (G)", preco: 160.00 }, { nome: "Pinheiro do Paraná", preco: 90.00 }, { nome: "Quaresmeira", preco: 25.00 }
+        categoria: "🌳 NATIVAS", itens: [
+          { n: "Acácia (Várias)", p: 20.00 }, { n: "Cedro Australiano", p: 20.00 }, { n: "Ipê Amarelo (2m)", p: 60.00 },
+          { n: "Ipê Amarelo/Branco", p: 20.00 }, { n: "Ipê Rosa (2m)", p: 60.00 }, { n: "Ipê Rosa/Roxo", p: 23.00 },
+          { n: "Jatobá", p: 20.00 }, { n: "Mogno", p: 25.00 }, { n: "Pau Brasil", p: 25.00 }, { n: "Pau Brasil (G)", p: 60.00 },
+          { n: "Pau Ferro", p: 20.00 }, { n: "Pinheiro Paraná (G)", p: 160.00 }, { n: "Pinheiro do Paraná", p: 90.00 }, { n: "Quaresmeira", p: 25.00 }
         ]
       }
     ];
@@ -423,11 +411,11 @@
           const div = document.createElement('div');
           div.className = 'product-item';
           div.innerHTML = `
-                    <span style="font-weight:500">${item.nome}</span>
-                    <div style="display:flex; align-items:center;">
-                        <span style="margin-right:8px; color:#1b5e20; font-size:0.95em; font-weight:bold;">R$ ${item.preco.toFixed(2)}</span>
-                        <button class="btn-add" onclick="alterarQtd('${item.nome}', ${item.preco}, 1)">+</button>
-                    </div>`;
+            <span style="font-weight:500">${item.n}</span>
+            <div style="display:flex; align-items:center;">
+              <span style="margin-right:8px; color:#1b5e20; font-size:0.95em; font-weight:bold;">R$ ${item.p.toFixed(2)}</span>
+              <button class="btn-add" onclick="alterarQtd('${item.n}', ${item.p}, 1)">+</button>
+            </div>`;
           area.appendChild(div);
         });
       });
@@ -447,53 +435,44 @@
       const floatBtn = document.getElementById('floatingBtn');
       const nomes = Object.keys(carrinho);
 
-      // Se não tem itens, esconde tudo e sai
       if (nomes.length === 0) {
         cartSection.style.display = 'none';
         floatBtn.style.display = 'none';
         return;
       }
 
-      // 1. Calcula os totais e gera o HTML da lista
       let total = 0;
       list.innerHTML = '';
       nomes.sort().forEach(nome => {
         const item = carrinho[nome];
         total += item.qtd * item.preco;
         list.innerHTML += `
-                <div class="cart-item">
-                    <div style="display:flex; justify-content:space-between; font-weight:500">
-                        <span>${nome}</span>
-                        <small>R$ ${item.preco.toFixed(2)}</small>
-                    </div>
-                    <div class="cart-controls">
-                        <button class="btn-mini" onclick="alterarQtd('${nome}', ${item.preco}, -1)">-</button>
-                        <span>${item.qtd}</span>
-                        <button class="btn-mini" onclick="alterarQtd('${nome}', ${item.preco}, 1)">+</button>
-                        <span style="font-weight:bold; color:#1b5e20">R$ ${(item.qtd * item.preco).toFixed(2)}</span>
-                    </div>
-                </div>`;
+          <div class="cart-item">
+            <div style="display:flex; justify-content:space-between; font-weight:500">
+              <span>${nome}</span>
+              <small>R$ ${item.preco.toFixed(2)}</small>
+            </div>
+            <div class="cart-controls">
+              <button class="btn-mini" onclick="alterarQtd('${nome}', ${item.preco}, -1)">-</button>
+              <span>${item.qtd}</span>
+              <button class="btn-mini" onclick="alterarQtd('${nome}', ${item.preco}, 1)">+</button>
+              <span style="font-weight:bold; color:#1b5e20">R$ ${(item.qtd * item.preco).toFixed(2)}</span>
+            </div>
+          </div>`;
       });
 
       const totalTexto = 'R$ ' + total.toFixed(2);
       totalEl.innerText = totalTexto;
-
-      // Atualiza o texto do botão flutuante também
       floatBtn.innerText = '🛒 ' + totalTexto;
 
-      // 2. LÓGICA DE EXIBIÇÃO CORRIGIDA:
-      // Verificamos se o carrinho JÁ está aberto.
       if (cartSection.style.display === 'flex') {
-        // Se já está aberto, mantém aberto e esconde o botão flutuante
         floatBtn.style.display = 'none';
       } else {
-        // Se está fechado, MANTÉM FECHADO e mostra só o botão flutuante
         cartSection.style.display = 'none';
         floatBtn.style.display = 'block';
       }
     }
 
-    // Função para minimizar/expandir carrinho
     function toggleCart() {
       const section = document.getElementById('cartSection');
       const float = document.getElementById('floatingBtn');
@@ -505,10 +484,10 @@
       } else {
         section.style.display = 'none';
         float.style.display = 'block';
-        float.innerText = '🛒 R$ ' + document.getElementById('totalValue').innerText.replace('R$ ', '');
       }
     }
 
+    // --- FORMATAÇÃO LIMPA E SEM EMOJIS ---
     function gerarTexto() {
       const nomes = Object.keys(carrinho);
       if (nomes.length === 0) return null;
@@ -517,7 +496,8 @@
       nomes.sort().forEach(n => {
         const i = carrinho[n];
         tot += i.qtd * i.preco;
-        txt += `✅ ${i.qtd}x ${n}\n   (R$ ${(i.qtd * i.preco).toFixed(2)})\n`;
+        // FORMATO LIMPO: 2x Laranja = (R$ 54.00)
+        txt += `${i.qtd}x ${n} = (R$ ${(i.qtd * i.preco).toFixed(2)})\n`;
       });
       txt += `------------------------\n*TOTAL: R$ ${tot.toFixed(2)}*`;
       return txt;
