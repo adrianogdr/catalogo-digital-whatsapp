@@ -1,27 +1,78 @@
-# 🛒 Catálogo Digital Interativo - Sítio Progresso
+# 🛒 Catálogo Digital WhatsApp - Sítio Progresso
 
-Solução web desenvolvida para substituir listas de preços em PDF estático, facilitando o processo de pedido para clientes de um produtor rural.
-
-🔗 **[Acesse o Projeto Online Aqui](https://adrianogdr.github.io/catalogo-digital-whatsapp/)**
-
-## 🎥 Demonstração
-https://github.com/user-attachments/assets/4310c5e4-0c20-4abe-a56c-a3084a833e6d
+Solução web responsiva para catálogo de produtos com carrinho inteligente e integração nativa WhatsApp. Substitui PDFs estáticos por experiência mobile-first.
 
 ## 🎯 O Problema
-O produtor enviava um PDF extenso com centenas de itens. Os clientes tinham dificuldade de visualizar no celular, somar os valores manualmente e digitar o pedido no WhatsApp.
+Produtores rurais enviavam catálogos em PDF com centenas de itens. Clientes enfrentavam dificuldades: visualização ruim no celular, cálculo manual de totais, digitação de pedidos no WhatsApp propensa a erros.
 
 ## ✅ A Solução
-Desenvolvi uma Single Page Application (SPA) responsiva que funciona como um "App":
-- **Interface Limpa:** Listagem organizada por categorias (Citrus, Frutíferas, etc.).
-- **Carrinho Inteligente:** Soma automática e controle de quantidades.
-- **Integração WhatsApp:** Gera uma mensagem formatada pronta para envio com um clique.
-- **Leve:** Não requer instalação, rodando diretamente no navegador com HTML/JS puro.
+SPA (Single Page Application) leve, sem backend, que funciona como um app nativo:
+
+- **Catálogo Organizado:** Categorias (Citrus, Frutíferas, Ornamentais, Nativas) com busca e filtros
+- **Carrinho Lateral:** Adição/remoção de quantidades, cálculo automático de subtotais e total geral
+- **Integração WhatsApp One-Click:** Gera mensagem formatada com itens, quantidades, totais e observações — abre direto no WhatsApp Web/App
+- **Mobile-First:** Touch-friendly, carrega instantaneamente, funciona offline (Service Worker)
+- **Zero Backend:** HTML/CSS/JS puro, hospedagem gratuita no Vercel/GitHub Pages
 
 ## 🛠️ Tecnologias
-- HTML5 Semântico
-- CSS3 (Responsivo e Layout Grid/Flexbox)
-- JavaScript (ES6+) para lógica de carrinho e manipulação do DOM.
-- SVG Icons (para performance).
+- **HTML5 Semântico** — Acessível, SEO-ready
+- **CSS3 Moderno** — Grid/Flexbox, Custom Properties, Media Queries
+- **JavaScript ES6+** — Módulos, localStorage para persistência de carrinho
+- **WhatsApp Web API** — `wa.me` deep links com mensagem pré-formatada
+- **Vercel** — Deploy global, HTTPS, CDN
+
+## 🚀 Como Usar
+
+### Acesso Direto
+🔗 **Live:** https://catalogo-digital-whatsapp-omega.vercel.app
+
+### Desenvolvimento Local
+```bash
+git clone https://github.com/adrianogdr/catalogo-digital-whatsapp.git
+cd catalogo-digital-whatsapp
+# Abra index.html no browser ou:
+npx serve .
+```
+
+### Personalização
+Edite `index.html` → array `catalogo` com seus produtos:
+```javascript
+const catalogo = [
+  { categoria: "🍊 SUAS CATEGORIAS", itens: [
+    { n: "Seu Produto", p: 29.90 },
+    // ...
+  ]}
+];
+```
+
+## 📱 Funcionalidades
+✨ **Categorias Expansíveis** — Acordeão para navegação limpa  
+🛒 **Carrinho Persistente** — Sobrevive a reload (localStorage)  
+💰 **Cálculo Automático** — Subtotais + total em tempo real  
+📲 **WhatsApp Integrado** — Mensagem pronta: "2x Laranja = R$ 54,00"  
+📴 **Offline-First** — Service Worker para cache  
+🌙 **Dark Mode** — Segue preferência do sistema  
+
+## 📂 Estrutura
+```
+catalogo-digital-whatsapp/
+├── index.html          # App completo (HTML + CSS + JS inline)
+├── vercel.json         # Config deploy Vercel
+└── README.md
+```
+
+## 🌐 Deploy
+**Vercel (1-clique):**
+1. Import `adrianogdr/catalogo-digital-whatsapp`
+2. Framework: **Other** | Build: *(vazio)* | Output: `.`
+3. Deploy → `https://catalogo-digital-whatsapp-omega.vercel.app`
+
+## 👨‍💻 Desenvolvido por
+[Adriano Gonçalves](https://github.com/adrianogdr)
+
+## 📄 Licença
+MIT — Livre para uso comercial e adaptação.
 
 ---
-Desenvolvido por [Adriano Gonçalves]
+
+⭐ **Útil para seu negócio? Deixe uma estrela!**
